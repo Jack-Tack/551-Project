@@ -1,4 +1,4 @@
-# Author's: Ryan DeSantis, Aiden Rudd, Jarrett Aaronson
+# Authors: Ryan DeSantis, Aidan Rudd, Jarrett Aaronson
 # Date: 4/23/24
 # Description: Media class for Media For You system
 
@@ -25,4 +25,3 @@ class Media:
 
     def setRating(self, rating):
         self.__rating = rating
-
