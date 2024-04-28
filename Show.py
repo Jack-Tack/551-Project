@@ -4,8 +4,9 @@
 from Media import Media
 
 class Show(Media):
-    def __init__(self, id, title, rating, directors, actors, countryCode, dateAdded, releaseYear, showRate, duration, genre, description):
+    def __init__(self, id, type, title, rating, directors, actors, countryCode, dateAdded, releaseYear, showRate, duration, genre, description):
         super().__init__(id, title, rating)
+        self.__type = type
         self.__directors = directors
         self.__actors = actors
         self.__countryCode = countryCode
@@ -15,6 +16,12 @@ class Show(Media):
         self.__duration = duration
         self.__genre = genre
         self.__description = description
+
+    def getType(self):
+        return self.__type
+
+    def setType(self, type):
+        self.__type = type
 
     def getDirectors(self):
         return self.__directors
@@ -69,4 +76,3 @@ class Show(Media):
 
     def setDescription(self, description):
         self.__description = description
-
