@@ -5,6 +5,7 @@ from Book import Book
 from Show import Show
 import tkinter.filedialog
 import os
+import tkinter.messagebox
 
 class Recommender:
     def __init__(self):
@@ -157,3 +158,34 @@ class Recommender:
         max_publisher = sorted(publisher.items(), reverse=False, key=lambda x: x[1])[0][0]
 
         return avg_count, max_author, max_publisher
+
+    def searchTVMovies(self, type, title, director, actor, genre):
+        type = type.strip().lower()
+        if type != "movie" and type != "tv show":
+            tkinter.messagebox.showerror(title="Error", message="You must select Movie or TV Show from Type first.")
+            return "No Results"
+        title = title.strip()
+        director = director.strip()
+        actor = actor.strip()
+        genre = genre.strip()
+        if title == "" and director == "" and actor == "" and genre == "":
+            tkinter.messagebox.showerror(title="Error", message="You must enter information for at least one category first.")
+            return "No Results"
+        results = []
+        for show in self.__shows.values():
+            if show.type.lower() == type:
+                if title and title not in show.title.lower():
+                    continue
+                if director and director not in show.directors.lower():
+                    continue
+                if actor and actor not in show.actors.lower():
+                    continue
+                if genre and genre not in show.genre.lower():
+                    continue
+                results.append(show)
+        return results
+
+
+
+
+
