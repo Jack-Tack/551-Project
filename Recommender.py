@@ -87,29 +87,32 @@ class Recommender:
         directors = {}
         actors = {}
         genres = {}
-
         for show in [show for show in self.__shows.values() if show.getType() == "Movie"]:
             ratings_count[show.getShowRate()] = ratings_count.get(show.getShowRate(), 0) + 1
             total_duration += show.getDuration()
-
             for director in show.getDirectors().split("\\"):
                 directors[director] = directors.get(director, 0) + 1
-
             for actor in show.getActors().split("\\"):
                 actors[actor] = actors.get(actor, 0) + 1
-
             genres[show.getGenre()] = genres.get(show.getGenre(), 0) + 1
-
-
         for rating, count in ratings_count.items():
             percent = count / len(self.__shows)
             ratings_count[rating] = round(percent, 2)
-
+        for show in [show for show in self.__shows.values() if show.getType() == "Movie"]:
+            ratings_count[show.getShowRate()] = ratings_count.get(show.getShowRate(), 0) + 1
+            total_duration += show.getDuration()
+            for director in show.getDirectors().split("\\"):
+                directors[director] = directors.get(director, 0) + 1
+            for actor in show.getActors().split("\\"):
+                actors[actor] = actors.get(actor, 0) + 1
+            genres[show.getGenre()] = genres.get(show.getGenre(), 0) + 1
+        for rating, count in ratings_count.items():
+            percent = count / len(self.__shows)
+            ratings_count[rating] = round(percent, 2)
         avg_duration = round(total_duration / len(self.__shows), 2)
         max_director = sorted(directors.items(), reverse=False, key=lambda x: x[1])[0][0]
         max_actor = sorted(actors.items(), reverse=False, key=lambda x: x[1])[0][0]
         freq_genre = sorted(genres.items(), reverse=False, key=lambda x: x[1])[0][0]
-
         return ratings_count, avg_duration, max_director, max_actor, freq_genre
 
 
@@ -118,45 +121,54 @@ class Recommender:
         total_seasons = 0
         actors = {}
         genres = {}
-
         for show in [show for show in self.__shows.values() if show.getType() == "TV Show"]:
             ratings_count[show.getShowRate()] = ratings_count.get(show.getShowRate(), 0) + 1
             total_seasons += show.getDuration().strip().replace('Season', '')
-
             for actor in show.getActors().split("\\"):
                 actors[actor] = actors.get(actor, 0) + 1
-
             genres[show.getGenre()] = genres.get(show.getGenre(), 0) + 1
-
         for rating, count in ratings_count.items():
             percent = count / len(self.__shows)
             ratings_count[rating] = round(percent, 2)
-
         avg_duration = round(total_seasons / len(self.__shows), 2)
         max_actor = sorted(actors.items(), reverse=False, key=lambda x: x[1])[0][0]
         freq_genre = sorted(genres.items(), reverse=False, key=lambda x: x[1])[0][0]
-
+        for show in [show for show in self.__shows.values() if show.getType() == "TV Show"]:
+            ratings_count[show.getShowRate()] = ratings_count.get(show.getShowRate(), 0) + 1
+            total_seasons += show.getDuration().strip().replace('Season', '')
+            for actor in show.getActors().split("\\"):
+                actors[actor] = actors.get(actor, 0) + 1
+            genres[show.getGenre()] = genres.get(show.getGenre(), 0) + 1
+        for rating, count in ratings_count.items():
+            percent = count / len(self.__shows)
+            ratings_count[rating] = round(percent, 2)
+        avg_duration = round(total_seasons / len(self.__shows), 2)
+        max_actor = sorted(actors.items(), reverse=False, key=lambda x: x[1])[0][0]
+        freq_genre = sorted(genres.items(), reverse=False, key=lambda x: x[1])[0][0]
         return ratings_count, avg_duration, max_actor, freq_genre
 
     def getBookStats(self):
         page_count = 0
         author = {}
         publisher = {}
-
         for book in self.__books.values():
             page_count += book.getNumPage()
-
             for author in book.getAuthors().split("\\"):
                 author[author] = author.get(author, 0) + 1
-
             for publisher in book.getPub().split("\\"):
                 publisher[publisher] = publisher.get(publisher, 0) + 1
-
-
         avg_count = round(page_count / len(self.__books), 2)
         max_author = sorted(author.items(), reverse=False, key=lambda x: x[1])[0][0]
         max_publisher = sorted(publisher.items(), reverse=False, key=lambda x: x[1])[0][0]
-
+        for book in self.__books.values():
+            page_count += book.getNumPage()
+            for author in book.getAuthors().split("\\"):
+                author[author] = author.get(author, 0) + 1
+            for publisher in book.getPub().split("\\"):
+                publisher[publisher] = publisher.get(publisher, 0) + 1
+        avg_count = round(page_count / len(self.__books), 2)
+        max_author = sorted(author.items(), reverse=False, key=lambda x: x[1])[0][0]
+        max_publisher = sorted(publisher.items(), reverse=False, key=lambda x: x[1])[0][0]
         return avg_count, max_author, max_publisher
 
     def searchTVMovies(self, type, title, director, actor, genre):
@@ -185,7 +197,79 @@ class Recommender:
                 results.append(show)
         return results
 
+    def searchBooks(self, title, author, publisher):
+        title = title.strip()
+        author = author.strip()
+        publisher = publisher.strip()
+        if title == "" and author == "" and publisher == "":
+            tkinter.messagebox.showerror(title="Error", message="You must enter information for at least one category first.")
+            return "No Results"
+        results = []
+        for book in self.__books.values():
+            if title and title not in book.title.lower():
+                continue
+            if author and author not in book.author.lower():
+                continue
+            if publisher and publisher not in book.pub.lower():
+                continue
+            results.append(book)
+        return results
 
-
-
-
+    def getRecommendations(self, type, title):
+        type = type.strip().lower()
+        title = title.strip().lower()
+        if type == "movie" or type == "tv show":
+            show_id = None
+            for show_id, show in self.__shows.items():
+                if show.title.lower() == title:
+                    break
+            else:
+                tkinter.messagebox.showerror(title="Error", message="There are no recommendations for this title")
+                return "No Results"
+            recommendations = []
+            if show_id in self.__associations:
+                for assoc_id, num_assoc in self.__associations[show_id].items():
+                    if assoc_id in self.__books:
+                        book = self.__books[assoc_id]
+                        recommendations.append(f"Book Title: {book.title}")
+                        recommendations.append(f"Authors: {book.authors}")
+                        recommendations.append(f"Rating: {book.rating}")
+                        recommendations.append(f"ISBN: {book.isbn}")
+                        recommendations.append(f"ISBN13: {book.isbn13}")
+                        recommendations.append(f"Language: {book.lang}")
+                        recommendations.append(f"Number of Pages: {book.numPage}")
+                        recommendations.append(f"Number of Ratings: {book.numRate}")
+                        recommendations.append(f"Date of Publication: {book.pubDate}")
+                        recommendations.append(f"Publisher: {book.pub}")
+            if not recommendations:
+                return "No Results"
+            else:
+                return "\n".join(recommendations)
+        elif type == "book":
+            book_id = None
+            for book_id, book in self.__books.items():
+                if book.title.lower() == title:
+                    break
+            else:
+                tkinter.messagebox.showerror(title="Error", message="There are no recommendations for this title")
+                return "No Results"
+            recommendations = []
+            if book_id in self.__associations:
+                for assoc_id, num_assoc in self.__associations[book_id].items():
+                    if assoc_id in self.__shows:
+                        show = self.__shows[assoc_id]
+                        recommendations.append(f"Show Title: {show.title}")
+                        recommendations.append(f"Type: {show.type}")
+                        recommendations.append(f"Directors: {show.directors}")
+                        recommendations.append(f"Actors: {show.actors}")
+                        recommendations.append(f"Rating: {show.rating}")
+                        recommendations.append(f"Country: {show.countryCode}")
+                        recommendations.append(f"Date Added: {show.dateAdded}")
+                        recommendations.append(f"Release Year: {show.releaseYear}")
+                        recommendations.append(f"Duration: {show.duration}")
+                        recommendations.append(f"Genre: {show.genre}")
+                        recommendations.append(f"Description: {show.description}")
+            if not recommendations:
+                return "No Results"
+            else:
+                return "\n".join(recommendations)
