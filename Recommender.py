@@ -142,12 +142,12 @@ class Recommender:
         page_count = 0
         author = {}
         publisher = {}
-        for book in self.__books.values():
-            page_count += book.getNumPage()
-            for author in book.getAuthors().split("\\"):
-                author[author] = author.get(author, 0) + 1
-            for publisher in book.getPub().split("\\"):
-                publisher[publisher] = publisher.get(publisher, 0) + 1
+        for book in list(self.__books.values())[1:]:
+            page_count += int(book.getNumPage())
+            for authors in book.getAuthors().split("\\"):
+                authors[author] = authors.get(author, 0) + 1
+            for publishers in book.getPub().split("\\"):
+                publishers[publisher] = publishers.get(publisher, 0) + 1
         avg_count = round(page_count / len(self.__books), 2)
         max_author = sorted(author.items(), reverse=False, key=lambda x: x[1])[0][0]
         max_publisher = sorted(publisher.items(), reverse=False, key=lambda x: x[1])[0][0]
