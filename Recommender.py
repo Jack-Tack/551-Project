@@ -74,7 +74,7 @@ class Recommender:
         s_width = len("Seasons")
         showsList.append(f"{'Title':<{title_width}} {'Seasons':<{s_width}}")
         for show in self.__shows.values():
-            if show.getType() != "Movie":
+            if show.getType() == "TV Show":
                 showsList.append(f"{show.getTitle():<{title_width}} {show.getDuration():<{s_width}}")
         return showsList
 
