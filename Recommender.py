@@ -140,17 +140,17 @@ class Recommender:
 
     def getBookStats(self):
         page_count = 0
-        author = {}
-        publisher = {}
+        authors = {}
+        publishers = {}
         for book in list(self.__books.values())[1:]:
             page_count += int(book.getNumPage())
-            for authors in book.getAuthors().split("\\"):
+            for author in book.getAuthors().split("\\"):
                 authors[author] = authors.get(author, 0) + 1
-            for publishers in book.getPub().split("\\"):
+            for publisher in book.getPub().split("\\"):
                 publishers[publisher] = publishers.get(publisher, 0) + 1
         avg_count = round(page_count / len(self.__books), 2)
-        max_author = sorted(author.items(), reverse=False, key=lambda x: x[1])[0][0]
-        max_publisher = sorted(publisher.items(), reverse=False, key=lambda x: x[1])[0][0]
+        max_author = sorted(authors.items(), reverse=False, key=lambda x: x[1])[0][0]
+        max_publisher = sorted(publishers.items(), reverse=False, key=lambda x: x[1])[0][0]
         return avg_count, max_author, max_publisher
 
     def searchTVMovies(self, type, title, director, actor, genre):
