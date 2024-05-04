@@ -69,12 +69,14 @@ class Recommender:
         return movieList
 
     def getTVList(self):
+        showsList = []
         title_width = max(len(show.getTitle()) for show in self.__shows.values() if show.getType() != "Movie")
         s_width = len("Seasons")
-        print(f"{'Title':<{title_width}} {'Seasons':<{s_width}}")
+        showsList.append(f"{'Title':<{title_width}} {'Seasons':<{s_width}}")
         for show in self.__shows.values():
             if show.getType() != "Movie":
-                print(f"{show.getTitle():<{title_width}} {show.getDuration():<{s_width}}")
+                showsList.append(f"{show.getTitle():<{title_width}} {show.getDuration():<{s_width}}")
+        return showsList
 
     def getBookList(self):
         title_width = max(len(book.getTitle()) for book in self.__books.values())
@@ -119,7 +121,7 @@ class Recommender:
         amount = 0
         for show in [show for show in self.__shows.values() if show.getType() == "TV Show"]:
             ratings_count[show.getShowRate()] = ratings_count.get(show.getShowRate(), 0) + 1
-            total_seasons += show.getDuration().strip().replace('Season', '')
+            total_seasons += int(show.getDuration().strip().replace('Season', '').replace('s', ''))
             for actor in show.getActors().split("\\"):
                 actors[actor] = actors.get(actor, 0) + 1
             genres[show.getGenre()] = genres.get(show.getGenre(), 0) + 1
