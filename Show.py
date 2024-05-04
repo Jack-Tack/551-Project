@@ -54,7 +54,7 @@ class Show(Media):
         self.__releaseYear = releaseYear
 
     def getShowRate(self):
-        return self.__releaseYear
+        return self.__showRate
 
     def setShowRate(self, showRate):
         self.__showRate = showRate
