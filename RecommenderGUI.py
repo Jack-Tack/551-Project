@@ -1,7 +1,9 @@
+# Authors: Ryan DeSantis, Aidan Rudd, Jarrett Aaronson
+# Date: 5/3/24
+# Description: GUI for the Media For You system
 from Recommender import Recommender
 import tkinter
 from tkinter import ttk
-
 
 class RecommenderGUI:
     def __init__(self):
@@ -13,22 +15,38 @@ class RecommenderGUI:
         self.__nb.pack(expand=1, fill=tkinter.BOTH)
         self.__movieTab = ttk.Frame(self.__nb)
         self.__nb.add(self.__movieTab, text="Movies")
-        self.__movieText = tkinter.Text(self.__movieTab, wrap=tkinter.WORD)
-        self.__movieStats = tkinter.Text(self.__movieTab, wrap=tkinter.WORD)
-        self.__movieText.pack()
-        self.__movieStats.pack()
+        self.__movieText = tkinter.Text(self.__movieTab, wrap=tkinter.WORD, state=tkinter.DISABLED)
+        self.__movieStats = tkinter.Text(self.__movieTab, wrap=tkinter.WORD, state=tkinter.DISABLED)
+        self.__movieText.pack(expand=1, fill=tkinter.BOTH)
+        self.__movieStats.pack(expand=1, fill=tkinter.BOTH)
+        self.__loadShowsButton = tkinter.Button(self.__main_window, text="Load Shows", command=self.loadShows)
+        self.__loadShowsButton.pack(expand=1)
 
+    def loadShows(self):
+        self.__movieText.configure(state=tkinter.NORMAL)
+        self.__movieStats.configure(state=tkinter.NORMAL)
+        self.__recommender.loadShows()
+        self.__movieText.delete("1.0", tkinter.END)
+        self.__movieStats.delete("1.0", tkinter.END)
+        movieList = self.__recommender.getMovieList()
+        for movie in movieList:
+            self.__movieText.insert(tkinter.END, movie + "\n")
+        ratingCount, avgDuration, maxDirector, maxActor, freqGenre = self.__recommender.getMovieStats()
+        for rating, percentage in ratingCount.items():
+            self.__movieStats.insert(tkinter.END, f"{rating}: {percentage*100}%\n")
+        self.__movieStats.insert(tkinter.END, "\n")
+        self.__movieStats.insert(tkinter.END, "Average Movie Duration: " + str(avgDuration) + " minutes" + "\n")
+        self.__movieStats.insert(tkinter.END, "\n")
+        self.__movieStats.insert(tkinter.END, "Most Prolific Director: " + str(maxDirector) + "\n")
+        self.__movieStats.insert(tkinter.END, "\n")
+        self.__movieStats.insert(tkinter.END, "Most Prolific Actor: " + str(maxActor) + "\n")
+        self.__movieStats.insert(tkinter.END, "\n")
+        self.__movieStats.insert(tkinter.END, "Most Frequent Genre: " + str(freqGenre) + "\n")
+        self.__movieText.configure(state=tkinter.DISABLED)
+        self.__movieStats.configure(state=tkinter.DISABLED)
 
 def main():
     app = RecommenderGUI()
     tkinter.mainloop()
 
-
 main()
-
-
-
-
-
-
-
