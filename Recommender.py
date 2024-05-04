@@ -59,27 +59,29 @@ class Recommender:
                     self.__associations[second_id][first_id] += 1
 
     def getMovieList(self):
-        title_width = max(len(show.title) for show in self.__shows.values() if show.type == "Movie")
-        run_width = max(len(show.duration) for show in self.__shows.values() if show.type == "Movie")
-        print(f"{'Title':<{title_width}} {'Runtime':<{run_width}}")
+        movieList = []
+        title_width = max(len(show.getTitle()) for show in self.__shows.values() if show.getType() == "Movie")
+        run_width = max(len(show.getDuration()) for show in self.__shows.values() if show.getType() == "Movie")
+        movieList.append(f"{'Title':<{title_width}} {'Runtime':<{run_width}}")
         for show in self.__shows.values():
-            if show.type == "Movie":
-                print(f"{show.title:<{title_width}} {show.duration:<{run_width}}")
+            if show.getType() == "Movie":
+                movieList.append(f"{show.getTitle():<{title_width}} {show.getDuration():<{run_width}}")
+        return movieList
 
     def getTVList(self):
-        title_width = max(len(show.title) for show in self.__shows.values() if show.type != "Movie")
+        title_width = max(len(show.getTitle()) for show in self.__shows.values() if show.getType() != "Movie")
         s_width = len("Seasons")
         print(f"{'Title':<{title_width}} {'Seasons':<{s_width}}")
         for show in self.__shows.values():
-            if show.type != "Movie":
-                print(f"{show.title:<{title_width}} {show.seasons:<{s_width}}")
+            if show.getType() != "Movie":
+                print(f"{show.getTitle():<{title_width}} {show.getDuration():<{s_width}}")
 
     def getBookList(self):
-        title_width = max(len(book.title) for book in self.__books.values())
-        auth_width = max(len(book.authors) for book in self.__books.values())
+        title_width = max(len(book.getTitle()) for book in self.__books.values())
+        auth_width = max(len(book.getAuthors()) for book in self.__books.values())
         print(f"{'Title':<{title_width}} {'Authors':<{auth_width}}")
         for book in self.__books.values():
-            print(f"{book.title:<{title_width}} {book.authors:<{auth_width}}")
+            print(f"{book.getTitle():<{title_width}} {book.getAuthors():<{auth_width}}")
 
     def getMovieStats(self):
         ratings_count = {}
@@ -87,18 +89,22 @@ class Recommender:
         directors = {}
         actors = {}
         genres = {}
+        amount = 0
         for show in [show for show in self.__shows.values() if show.getType() == "Movie"]:
             ratings_count[show.getShowRate()] = ratings_count.get(show.getShowRate(), 0) + 1
-            total_duration += show.getDuration()
+            total_duration += int(show.getDuration().strip().replace("min", ""))
             for director in show.getDirectors().split("\\"):
                 directors[director] = directors.get(director, 0) + 1
             for actor in show.getActors().split("\\"):
                 actors[actor] = actors.get(actor, 0) + 1
             genres[show.getGenre()] = genres.get(show.getGenre(), 0) + 1
+        for show in self.__shows.values():
+            if show.getType() == "Movie":
+                amount += 1
         for rating, count in ratings_count.items():
-            percent = count / len(self.__shows)
+            percent = count / amount
             ratings_count[rating] = round(percent, 2)
-        avg_duration = round(total_duration / len(self.__shows), 2)
+        avg_duration = round(total_duration / amount, 2)
         max_director = sorted(directors.items(), reverse=False, key=lambda x: x[1])[0][0]
         max_actor = sorted(actors.items(), reverse=False, key=lambda x: x[1])[0][0]
         freq_genre = sorted(genres.items(), reverse=False, key=lambda x: x[1])[0][0]
@@ -110,16 +116,20 @@ class Recommender:
         total_seasons = 0
         actors = {}
         genres = {}
+        amount = 0
         for show in [show for show in self.__shows.values() if show.getType() == "TV Show"]:
             ratings_count[show.getShowRate()] = ratings_count.get(show.getShowRate(), 0) + 1
             total_seasons += show.getDuration().strip().replace('Season', '')
             for actor in show.getActors().split("\\"):
                 actors[actor] = actors.get(actor, 0) + 1
             genres[show.getGenre()] = genres.get(show.getGenre(), 0) + 1
+        for show in self.__shows.values():
+            if show.getType() != "Movie":
+                amount += 1
         for rating, count in ratings_count.items():
-            percent = count / len(self.__shows)
+            percent = count / amount
             ratings_count[rating] = round(percent, 2)
-        avg_duration = round(total_seasons / len(self.__shows), 2)
+        avg_duration = round(total_seasons / amount, 2)
         max_actor = sorted(actors.items(), reverse=False, key=lambda x: x[1])[0][0]
         freq_genre = sorted(genres.items(), reverse=False, key=lambda x: x[1])[0][0]
         return ratings_count, avg_duration, max_actor, freq_genre
