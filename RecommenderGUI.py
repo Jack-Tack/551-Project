@@ -89,7 +89,6 @@ class RecommenderGUI:
         for book in bookList:
             self.__booksText.insert(tkinter.END, book + "\n")
         avgPage, maxAuthor, maxPublisher = self.__recommender.getBookStats()
-        self.__booksStats.insert(tkinter.END, "\n")
         self.__booksStats.insert(tkinter.END, "Average Page Count: " + str(avgPage) + " pages" + "\n")
         self.__booksStats.insert(tkinter.END, "\n")
         self.__booksStats.insert(tkinter.END, "Most Prolific Author: " + str(maxAuthor) + "\n")
@@ -102,6 +101,3 @@ def main():
     tkinter.mainloop()
 
 main()
-
-
-
