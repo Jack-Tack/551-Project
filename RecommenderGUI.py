@@ -68,6 +68,8 @@ class RecommenderGUI:
         self.__movieStats.insert(tkinter.END, "Most Frequent Genre: " + str(freqGenre) + "\n")
         self.__movieText.configure(state=tkinter.DISABLED)
         self.__movieStats.configure(state=tkinter.DISABLED)
+        self.__showsText.configure(state=tkinter.DISABLED)
+        self.__showsStats.configure(state=tkinter.DISABLED)
 
 def main():
     app = RecommenderGUI()
