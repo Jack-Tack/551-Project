@@ -79,11 +79,13 @@ class Recommender:
         return showsList
 
     def getBookList(self):
+        booksList = []
         title_width = max(len(book.getTitle()) for book in self.__books.values())
         auth_width = max(len(book.getAuthors()) for book in self.__books.values())
-        print(f"{'Title':<{title_width}} {'Authors':<{auth_width}}")
-        for book in self.__books.values():
-            print(f"{book.getTitle():<{title_width}} {book.getAuthors():<{auth_width}}")
+        booksList.append(f"{'Title':<{title_width}} {'Authors':<{auth_width}}")
+        for book in list(self.__books.values())[1:]:
+            booksList.append(f"{book.getTitle():<{title_width}} {book.getAuthors():<{auth_width}}")
+        return booksList
 
     def getMovieStats(self):
         ratings_count = {}
