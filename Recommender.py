@@ -1,12 +1,15 @@
 # Authors: Ryan DeSantis, Aidan Rudd, Jarrett Aaronson
 # Date: 4/23/24
 # Description: Recommender class for Media For You system
+
+# Here we import the classes from the Book.py and Show.py programs as well as tkinter
 from Book import Book
 from Show import Show
 import tkinter.filedialog
 import os
 import tkinter.messagebox
 
+# This is the recommender class that creates dictionaries to store the books, shows, and associations
 class Recommender:
     def __init__(self):
         # self.__book = {Book.getID(book): book}
@@ -17,6 +20,20 @@ class Recommender:
         self.__associations = {}
 
     def loadBooks(self):
+        """
+        This loads books from a file into a book inventory
+
+        It prompts the user to select a file using a file dialog box.
+        It will repeatedly prompt the user until they submit a valid file.
+        Once a valid file is submitted it reads the file line by line and
+        extracts the information from the file and adds it to the book inventory
+        :return:
+            None
+
+        :raises:
+            FileNotFoundError if selected file doesn't exist
+            ValueError if the file format is incorrect
+        """
         self.__books.clear()
         filename = tkinter.filedialog.askopenfilename(title="Files", initialdir=os.getcwd())
         while not os.path.exists(f"{filename}"):
@@ -29,6 +46,20 @@ class Recommender:
                 self.__books[id] = book
 
     def loadShows(self):
+        """
+        This loads shows from a file into a show inventory
+
+        It prompts the user to select a file using a file dialog box.
+        It will repeatedly prompt the user until they submit a valid file.
+        Once a valid file is submitted it reads the file line by line and
+        extracts the information from the file and adds it to the show inventory
+        :return:
+            None
+
+        :raises:
+            FileNotFoundError if selected file doesn't exist
+            ValueError if the file format is incorrect
+        """
         self.__shows.clear()
         filename = tkinter.filedialog.askopenfilename(title="Files", initialdir=os.getcwd())
         while not os.path.exists(f"{filename}"):
@@ -41,6 +72,20 @@ class Recommender:
                 self.__shows[id] = show
 
     def loadAssociations(self):
+        """
+        Loads associations betweens books and shows from a file into an association inventory
+
+        It prompts the user to select a file using a file dialog box.
+        It will repeatedly prompt the user until they submit a valid file.
+        Once a valid file is submitted it reads the file line by line and
+        extracts the information from the file and adds it to the association inventory
+        :return:
+            None
+
+        :raises:
+            FileNotFoundError if selected file doesn't exist
+            ValueError if the file format is incorrect
+        """
         self.__associations.clear()
         filename = tkinter.filedialog.askopenfilename(title="Files", initialdir=os.getcwd())
         while not os.path.exists(f"{filename}"):
@@ -62,6 +107,15 @@ class Recommender:
                     self.__associations[second_id][first_id] += 1
 
     def getMovieList(self):
+        """
+        Gets a list of movies along with their titles and runtimes
+
+        Generates a list of movies by going over the shows inventory and
+        filtering for those with type "Movie" and creates a formated list of movies
+
+        :return:
+            list of movies and their runtimes
+        """
         movieList = []
         title_width = max(len(show.getTitle()) for show in self.__shows.values() if show.getType() == "Movie")
         run_width = max(len(show.getDuration()) for show in self.__shows.values() if show.getType() == "Movie")
@@ -72,6 +126,15 @@ class Recommender:
         return movieList
 
     def getTVList(self):
+        """
+        Gets a list of tv shows along with their titles and number of seasons
+
+        Generates a list of shows by going over the shows inventory and
+        filtering for those with type "TV Show" and creates a formated list of movies
+
+        :return:
+            list of shows and their seasons
+        """
         showsList = []
         title_width = max(len(show.getTitle()) for show in self.__shows.values() if show.getType() != "Movie")
         s_width = len("Seasons")
@@ -82,6 +145,15 @@ class Recommender:
         return showsList
 
     def getBookList(self):
+        """
+        Gets a list of books along with their titles and authors
+
+        Generates a list of books by going over the books inventory and
+        calculates the max width of the title and author to format properly
+
+        :return:
+            list of book titles and movies
+        """
         booksList = []
         title_width = max(len(book.getTitle()) for book in self.__books.values())
         auth_width = max(len(book.getAuthors()) for book in self.__books.values())
@@ -91,6 +163,17 @@ class Recommender:
         return booksList
 
     def getMovieStats(self):
+        """
+        Gets the stats for movies in inventory
+
+        It calculates various statistics for movies in the inventory
+        including the amount of each rating, average duration, most frequent
+        director, most frequent actor, and most frequent genre
+
+        :return:
+            tuple containing amount of each rating, average duration, most frequent
+            director, most frequent actor, and most frequent genre
+        """
         ratings_count = {}
         total_duration = 0
         directors = {}
@@ -126,6 +209,17 @@ class Recommender:
         return ratings_count, avg_duration, max_director, max_actor, freq_genre
 
     def getTVStats(self):
+        """
+        Gets the stats for TV shows in inventory
+
+        It calculates various statistics for tv shows in the inventory
+        including the amount of each rating, total seasons, most frequent actor,
+        and most frequent genre
+
+        :return:
+            tuple containing amount of each rating, average duration,
+            most frequent actor, and most frequent genre
+        """
         ratings_count = {}
         total_seasons = 0
         actors = {}
@@ -151,6 +245,17 @@ class Recommender:
         return ratings_count, avg_duration, max_actor, freq_genre
 
     def getBookStats(self):
+        """
+        Gets the stats for books in inventory
+
+        It calculates various statistics for books in the inventory
+        including the average page count, most frequent author, and most frequent
+        publisher
+
+        :return:
+            tuple containing average page count, most frequent author, and most frequent
+            publisher
+        """
         page_count = 0
         authors = {}
         publishers = {}
@@ -168,6 +273,20 @@ class Recommender:
         return avg_count, max_author, max_publisher
 
     def searchTVMovies(self, type, title, director, actor, genre):
+        """
+        Searches the collection of tv shows and movies based on various
+        criteria
+
+        :parameter:
+            type: show or movie
+            title: title of show or movie
+            director: Name of director
+            actor: Name of actor
+            genre: Genre of show
+
+        :returns:
+            list of search results or "No Results"
+        """
         type = type.strip()
         if type != "Movie" and type != "TV Show":
             tkinter.messagebox.showerror(title="Error", message="You must select Movie or TV Show from Type first.")
@@ -217,6 +336,17 @@ class Recommender:
         return results
 
     def searchBooks(self, title, author, publisher):
+        """
+        Searches the collection of books based on various criteria
+
+        :parameter:
+            title: title of show or movie
+            author: Name of author
+            publisher: Name of publisher
+
+            :returns:
+                list of search results or "No Results"
+        """
         title = title.strip()
         author = author.strip()
         publisher = publisher.strip()
@@ -244,6 +374,22 @@ class Recommender:
         return results
 
     def getRecommendations(self, type, title):
+        """
+        Gathers recommendations based on the type and title of 
+        book, tv show, or movie
+        
+        Takes in the type of media the user wants to use whether it be a 
+        "Movie", "Book", or "Tv Show" and then the user inputs the title of that 
+        media type. It then searches for associated pieces of media based on the input
+    
+        :parameter:
+            type: show, book, or movie
+            title: title of media
+            
+        :return:
+            Information about the recommended media thats associated
+            with the information the user inputted
+        """
         type = type.strip()
         title = title.strip()
         if type == "Movie" or type == "TV Show":
