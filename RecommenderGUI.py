@@ -94,11 +94,12 @@ class RecommenderGUI:
         self.__movieStats.configure(state=tkinter.NORMAL)
         self.__showsText.configure(state=tkinter.NORMAL)
         self.__showsStats.configure(state=tkinter.NORMAL)
-        self.__recommender.loadShows()
         self.__movieText.delete("1.0", tkinter.END)
         self.__movieStats.delete("1.0", tkinter.END)
         self.__showsText.delete("1.0", tkinter.END)
         self.__showsStats.delete("1.0", tkinter.END)
+        self.__recommender.loadShows()
+
         showsList = self.__recommender.getTVList()
         movieList = self.__recommender.getMovieList()
         for show in showsList:

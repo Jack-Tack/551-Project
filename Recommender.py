@@ -17,6 +17,7 @@ class Recommender:
         self.__associations = {}
 
     def loadBooks(self):
+        self.__books.clear()
         filename = tkinter.filedialog.askopenfilename(title="Files", initialdir=os.getcwd())
         while not os.path.exists(f"{filename}"):
             filename = tkinter.filedialog.askopenfilename(title="Files", initialdir=os.getcwd())
@@ -28,6 +29,7 @@ class Recommender:
                 self.__books[id] = book
 
     def loadShows(self):
+        self.__shows.clear()
         filename = tkinter.filedialog.askopenfilename(title="Files", initialdir=os.getcwd())
         while not os.path.exists(f"{filename}"):
             filename = tkinter.filedialog.askopenfilename(title="Files", initialdir=os.getcwd())
@@ -39,6 +41,7 @@ class Recommender:
                 self.__shows[id] = show
 
     def loadAssociations(self):
+        self.__associations.clear()
         filename = tkinter.filedialog.askopenfilename(title="Files", initialdir=os.getcwd())
         while not os.path.exists(f"{filename}"):
             filename = tkinter.filedialog.askopenfilename(title="Files", initialdir=os.getcwd())
