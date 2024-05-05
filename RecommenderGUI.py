@@ -20,11 +20,13 @@ class RecommenderGUI:
         self.__booksTab = ttk.Frame(self.__nb)
         self.__searchMovieShow = ttk.Frame(self.__nb)
         self.__searchBook = ttk.Frame(self.__nb)
+        self.__recommendations = ttk.Frame(self.__nb)
         self.__nb.add(self.__movieTab, text="Movies")
         self.__nb.add(self.__showsTab, text="TV Shows")
         self.__nb.add(self.__booksTab, text="Books")
         self.__nb.add(self.__searchMovieShow, text="Search Movies/TV")
         self.__nb.add(self.__searchBook, text="Search Books")
+        self.__nb.add(self.__recommendations, text="Recommendations")
         self.__movieText = tkinter.Text(self.__movieTab, wrap=tkinter.WORD, state=tkinter.DISABLED)
         self.__movieStats = tkinter.Text(self.__movieTab, wrap=tkinter.WORD, state=tkinter.DISABLED)
         self.__showsText = tkinter.Text(self.__showsTab, wrap=tkinter.WORD, state=tkinter.DISABLED)
@@ -54,6 +56,14 @@ class RecommenderGUI:
         self.__publisherEntry = tkinter.Entry(self.__searchBook, width=30)
         self.__searchBookButton = tkinter.Button(self.__searchBook, text="search", command=self.searchBooks)
         self.__searchBookResults = tkinter.Text(self.__searchBook, wrap=tkinter.WORD, state=tkinter.DISABLED)
+
+        self.__recommenderSearchTypeLabel = tkinter.Label(self.__recommendations, text="Type")
+        self.__recommendOptions = ["Movie", "TV Show", "Book"]
+        self.__searchRecommendationsComboBox = ttk.Combobox(self.__recommendations, values=self.__recommendOptions)
+        self.__recommendTitleLabel = tkinter.Label(self.__recommendations, text="Title:")
+        self.__recommendTitleEntry = tkinter.Entry(self.__recommendations, width=30)
+        self.__recommendationsButton = tkinter.Button(self.__recommendations, text="Get Recommendations", command=self.getRecommendations)
+        self.__recommendationsResults = tkinter.Text(self.__recommendations, wrap=tkinter.WORD, state=tkinter.DISABLED)
 
         self.__movieText.pack(expand=1, fill=tkinter.BOTH)
         self.__movieStats.pack(expand=1, fill=tkinter.BOTH)
@@ -85,6 +95,13 @@ class RecommenderGUI:
         self.__publisherEntry.pack(expand=1)
         self.__searchBookButton.pack(expand=1)
         self.__searchBookResults.pack(expand=1, fill=tkinter.X)
+
+        self.__recommenderSearchTypeLabel.pack(expand=1)
+        self.__searchRecommendationsComboBox.pack(expand=1)
+        self.__recommendTitleLabel.pack(expand=1)
+        self.__recommendTitleEntry.pack(expand=1)
+        self.__recommendationsButton.pack(expand=1)
+        self.__recommendationsResults.pack(expand=1, fill=tkinter.X)
 
         self.__loadShowsButton = tkinter.Button(self.__main_window, text="Load Shows", command=self.loadShows)
         self.__loadShowsButton.pack(expand=1, side=tkinter.LEFT)
@@ -190,6 +207,20 @@ class RecommenderGUI:
             for result in results:
                 self.__searchBookResults.insert(tkinter.END, f"{result}\n")
         self.__searchBookResults.configure(state=tkinter.DISABLED)
+
+        def getRecommendations(self):
+            self.__recommendationsResults.configure(state=tkinter.NORMAL)
+            type = self.__searchRecommendationsComboBox.get()
+            title = self.__recommendTitleEntry.get()
+            recommendations = self.__recommender.getRecommendations(type, title)
+
+            self.__recommendationsResults.delete('1.0', tkinter.END)
+            if recommendations:
+                for recommendation in recommendations:
+                    self.__recommendationsResults.insert(tkinter.END, f"{recommendation}\n")
+            else:
+                self.__recommendationsResults.insert(tkinter.END, "No recommendations found.\n")
+                self.__recommendationsResults.configure(state=tkinter.DISABLED)
 
     def creditInfoBox(self):
         tkinter.messagebox.showinfo(title="Information", message="Programmers: Ryan DeSantis, Jarrett Aaronson, Aidan Rudd\n Completetion Date: 5/5/2024")
