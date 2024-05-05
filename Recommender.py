@@ -109,7 +109,7 @@ class Recommender:
         Gets a list of movies along with their titles and runtimes
 
         Generates a list of movies by going over the shows inventory and
-        filtering for those with type "Movie" and creates a formated list of movies
+        filtering for those with type "Movie" and creates a formatted list of movies
         :return:
             list of movies and their runtimes
         """
@@ -127,7 +127,7 @@ class Recommender:
         Gets a list of tv shows along with their titles and number of seasons
 
         Generates a list of shows by going over the shows inventory and
-        filtering for those with type "TV Show" and creates a formated list of movies
+        filtering for those with type "TV Show" and creates a formatted list of movies
         :return:
             list of shows and their seasons
         """
@@ -382,7 +382,7 @@ class Recommender:
             title: title of media
 
         :return:
-            Information about the recommended media thats associated
+            Information about the recommended media that's associated
             with the information the user inputted
         """
         type = type.strip()
