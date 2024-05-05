@@ -105,6 +105,8 @@ class RecommenderGUI:
         self.__loadShowsButton.pack(expand=1, side=tkinter.LEFT)
         self.__loadBooksButton = tkinter.Button(self.__main_window, text="Load Books", command=self.loadBooks)
         self.__loadBooksButton.pack(expand=1, side=tkinter.LEFT)
+        self.__loadRecommendationsButton = tkinter.Button(self.__main_window, text="Load Recommendations", command=self.loadAssociations)
+        self.__loadRecommendationsButton.pack(expand=1, side=tkinter.LEFT)
 
         self.__creditButton = tkinter.Button(self.__main_window, text="Information", command=self.creditInfoBox)
         self.__creditButton.pack(expand=1, side=tkinter.LEFT)
@@ -206,6 +208,9 @@ class RecommenderGUI:
             for result in results:
                 self.__searchBookResults.insert(tkinter.END, f"{result}\n")
         self.__searchBookResults.configure(state=tkinter.DISABLED)
+
+    def loadAssociations(self):
+        self.__recommender.loadAssociations()
 
     def getRecommendations(self):
         self.__recommendationsResults.configure(state=tkinter.NORMAL)
