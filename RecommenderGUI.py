@@ -200,6 +200,20 @@ class RecommenderGUI:
                 self.__searchBookResults.insert(tkinter.END, f"{result}\n")
         self.__searchBookResults.configure(state=tkinter.DISABLED)
 
+        def getRecommendations(self):
+            self.__recommendationsResults.configure(state=tkinter.NORMAL)
+            type = self.__searchRecommendationsComboBox.get()
+            title = self.__recommendTitleEntry.get()
+            recommendations = self.__recommender.getRecommendations(type, title)
+
+            self.__recommendationsResults.delete('1.0', tkinter.END)
+            if recommendations:
+                for recommendation in recommendations:
+                    self.__recommendationsResults.insert(tkinter.END, f"{recommendation}\n")
+            else:
+                self.__recommendationsResults.insert(tkinter.END, "No recommendations found.\n")
+                self.__recommendationsResults.configure(state=tkinter.DISABLED)
+
     def creditInfoBox(self):
         tkinter.messagebox.showinfo(title="Information",
                                     message="Programmers: Ryan DeSantis, Jarrett Aaronson, Aidan Rudd\n Completetion Date: 5/5/2024")
