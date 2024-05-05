@@ -244,12 +244,12 @@ class Recommender:
         return results
 
     def getRecommendations(self, type, title):
-        type = type.strip().lower()
-        title = title.strip().lower()
+        type = type.strip()
+        title = title.strip()
         if type == "movie" or type == "tv show":
             show_id = None
             for show_id, show in self.__shows.items():
-                if show.title.lower() == title:
+                if show.getTitle() == title:
                     break
             else:
                 tkinter.messagebox.showerror(title="Error", message="There are no recommendations for this title")
@@ -259,16 +259,16 @@ class Recommender:
                 for assoc_id, num_assoc in self.__associations[show_id].items():
                     if assoc_id in self.__books:
                         book = self.__books[assoc_id]
-                        recommendations.append(f"Book Title: {book.title}")
-                        recommendations.append(f"Authors: {book.authors}")
-                        recommendations.append(f"Rating: {book.rating}")
-                        recommendations.append(f"ISBN: {book.isbn}")
-                        recommendations.append(f"ISBN13: {book.isbn13}")
-                        recommendations.append(f"Language: {book.lang}")
-                        recommendations.append(f"Number of Pages: {book.numPage}")
-                        recommendations.append(f"Number of Ratings: {book.numRate}")
-                        recommendations.append(f"Date of Publication: {book.pubDate}")
-                        recommendations.append(f"Publisher: {book.pub}")
+                        recommendations.append(f"Book Title: {book.getTitle()}")
+                        recommendations.append(f"Authors: {book.getAuthors()}")
+                        recommendations.append(f"Rating: {book.getRating()}")
+                        recommendations.append(f"ISBN: {book.getISBN()}")
+                        recommendations.append(f"ISBN13: {book.getISBN13()}")
+                        recommendations.append(f"Language: {book.getLang()}")
+                        recommendations.append(f"Number of Pages: {book.getNumPage()}")
+                        recommendations.append(f"Number of Ratings: {book.getNumRate()}")
+                        recommendations.append(f"Date of Publication: {book.getPubDate()}")
+                        recommendations.append(f"Publisher: {book.getPub()}")
             if not recommendations:
                 return "No Results"
             else:
@@ -276,7 +276,7 @@ class Recommender:
         elif type == "book":
             book_id = None
             for book_id, book in self.__books.items():
-                if book.title.lower() == title:
+                if book.getTitle() == title:
                     break
             else:
                 tkinter.messagebox.showerror(title="Error", message="There are no recommendations for this title")
@@ -286,17 +286,17 @@ class Recommender:
                 for assoc_id, num_assoc in self.__associations[book_id].items():
                     if assoc_id in self.__shows:
                         show = self.__shows[assoc_id]
-                        recommendations.append(f"Show Title: {show.title}")
-                        recommendations.append(f"Type: {show.type}")
-                        recommendations.append(f"Directors: {show.directors}")
-                        recommendations.append(f"Actors: {show.actors}")
-                        recommendations.append(f"Rating: {show.rating}")
-                        recommendations.append(f"Country: {show.countryCode}")
-                        recommendations.append(f"Date Added: {show.dateAdded}")
-                        recommendations.append(f"Release Year: {show.releaseYear}")
-                        recommendations.append(f"Duration: {show.duration}")
-                        recommendations.append(f"Genre: {show.genre}")
-                        recommendations.append(f"Description: {show.description}")
+                        recommendations.append(f"Show Title: {show.getTitle()}")
+                        recommendations.append(f"Type: {show.getType()}")
+                        recommendations.append(f"Directors: {show.getDirectors()}")
+                        recommendations.append(f"Actors: {show.getActors()}")
+                        recommendations.append(f"Rating: {show.getRating()}")
+                        recommendations.append(f"Country: {show.getCountryCode()}")
+                        recommendations.append(f"Date Added: {show.getDateAdded()}")
+                        recommendations.append(f"Release Year: {show.getReleaseYear()}")
+                        recommendations.append(f"Duration: {show.getDuration()}")
+                        recommendations.append(f"Genre: {show.getGenre()}")
+                        recommendations.append(f"Description: {show.getDescription()}")
             if not recommendations:
                 return "No Results"
             else:
