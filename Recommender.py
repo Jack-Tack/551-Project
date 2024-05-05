@@ -290,17 +290,19 @@ class Recommender:
                 for assoc_id, num_assoc in self.__associations[book_id].items():
                     if assoc_id in self.__shows:
                         show = self.__shows[assoc_id]
-                        recommendations.append(f"Show Title: {show.getTitle()}")
-                        recommendations.append(f"Type: {show.getType()}")
-                        recommendations.append(f"Directors: {show.getDirectors()}")
-                        recommendations.append(f"Actors: {show.getActors()}")
-                        recommendations.append(f"Rating: {show.getRating()}")
-                        recommendations.append(f"Country: {show.getCountryCode()}")
-                        recommendations.append(f"Date Added: {show.getDateAdded()}")
-                        recommendations.append(f"Release Year: {show.getReleaseYear()}")
-                        recommendations.append(f"Duration: {show.getDuration()}")
-                        recommendations.append(f"Genre: {show.getGenre()}")
-                        recommendations.append(f"Description: {show.getDescription()}")
+                        recommendations.append(f"Show Title: {show.getTitle()}\n")
+                        recommendations.append(f"Type: {show.getType()}\n")
+                        recommendations.append(f"Directors: {show.getDirectors()}\n")
+                        recommendations.append(f"Actors: {show.getActors()}\n")
+                        recommendations.append(f"Rating: {show.getRating()}\n")
+                        recommendations.append(f"Country: {show.getCountryCode()}\n")
+                        recommendations.append(f"Date Added: {show.getDateAdded()}\n")
+                        recommendations.append(f"Release Year: {show.getReleaseYear()}\n")
+                        recommendations.append(f"Duration: {show.getDuration()}\n")
+                        recommendations.append(f"Genre: {show.getGenre()}\n")
+                        recommendations.append(f"Description: {show.getDescription()}\n")
+                        recommendations.append("************************************")
+                        recommendations.append("\n")
             if not recommendations:
                 return "No Results"
             else:
