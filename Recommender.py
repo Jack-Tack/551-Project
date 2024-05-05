@@ -29,7 +29,6 @@ class Recommender:
         extracts the information from the file and adds it to the book inventory
         :return:
             None
-
         :raises:
             FileNotFoundError if selected file doesn't exist
             ValueError if the file format is incorrect
@@ -55,7 +54,6 @@ class Recommender:
         extracts the information from the file and adds it to the show inventory
         :return:
             None
-
         :raises:
             FileNotFoundError if selected file doesn't exist
             ValueError if the file format is incorrect
@@ -68,7 +66,8 @@ class Recommender:
             for line in file:
                 show_info = line.strip().split(",")
                 id, type, title, directors, actors, rating, countryCode, dateAdded, releaseYear, showRate, duration, genre, description = show_info
-                show = Show(id, type, title, rating, directors, actors, countryCode, dateAdded, releaseYear, showRate, duration, genre, description)
+                show = Show(id, type, title, rating, directors, actors, countryCode, dateAdded, releaseYear, showRate,
+                            duration, genre, description)
                 self.__shows[id] = show
 
     def loadAssociations(self):
@@ -81,7 +80,6 @@ class Recommender:
         extracts the information from the file and adds it to the association inventory
         :return:
             None
-
         :raises:
             FileNotFoundError if selected file doesn't exist
             ValueError if the file format is incorrect
@@ -112,7 +110,6 @@ class Recommender:
 
         Generates a list of movies by going over the shows inventory and
         filtering for those with type "Movie" and creates a formated list of movies
-
         :return:
             list of movies and their runtimes
         """
@@ -131,7 +128,6 @@ class Recommender:
 
         Generates a list of shows by going over the shows inventory and
         filtering for those with type "TV Show" and creates a formated list of movies
-
         :return:
             list of shows and their seasons
         """
@@ -150,7 +146,6 @@ class Recommender:
 
         Generates a list of books by going over the books inventory and
         calculates the max width of the title and author to format properly
-
         :return:
             list of book titles and movies
         """
@@ -169,7 +164,6 @@ class Recommender:
         It calculates various statistics for movies in the inventory
         including the amount of each rating, average duration, most frequent
         director, most frequent actor, and most frequent genre
-
         :return:
             tuple containing amount of each rating, average duration, most frequent
             director, most frequent actor, and most frequent genre
@@ -215,7 +209,6 @@ class Recommender:
         It calculates various statistics for tv shows in the inventory
         including the amount of each rating, total seasons, most frequent actor,
         and most frequent genre
-
         :return:
             tuple containing amount of each rating, average duration,
             most frequent actor, and most frequent genre
@@ -251,7 +244,6 @@ class Recommender:
         It calculates various statistics for books in the inventory
         including the average page count, most frequent author, and most frequent
         publisher
-
         :return:
             tuple containing average page count, most frequent author, and most frequent
             publisher
@@ -296,12 +288,13 @@ class Recommender:
         actor = actor.strip()
         genre = genre.strip()
         if title == "" and director == "" and actor == "" and genre == "":
-            tkinter.messagebox.showerror(title="Error", message="You must enter information for at least one category first.")
+            tkinter.messagebox.showerror(title="Error",
+                                         message="You must enter information for at least one category first.")
             return "No Results"
-
         results = []
         maxMovieTitleWidth = max(len(show.getTitle()) for show in self.__shows.values() if show.getType() == "Movie")
-        maxMovieDirectorWidth = max(len(show.getDirectors()) for show in self.__shows.values() if show.getType() == "Movie")
+        maxMovieDirectorWidth = max(
+            len(show.getDirectors()) for show in self.__shows.values() if show.getType() == "Movie")
         maxMovieActorWidth = max(len(show.getActors()) for show in self.__shows.values() if show.getType() == "Movie")
         maxMovieGenreWidth = max(len(show.getGenre()) for show in self.__shows.values() if show.getType() == "Movie")
         maxTVTitleWidth = max(len(show.getTitle()) for show in self.__shows.values() if show.getType() == "TV Show")
@@ -309,10 +302,11 @@ class Recommender:
         maxTVActorWidth = max(len(show.getActors()) for show in self.__shows.values() if show.getType() == "TV Show")
         maxTVGenreWidth = max(len(show.getGenre()) for show in self.__shows.values() if show.getType() == "TV Show")
         if type == "Movie":
-            results.append(f"{'Title':<{maxMovieTitleWidth}}{'Directors':<{maxMovieDirectorWidth}}{'Actors':<{maxMovieActorWidth}}{'Genre':<{maxMovieGenreWidth}}")
+            results.append(
+                f"{'Title':<{maxMovieTitleWidth}}{'Directors':<{maxMovieDirectorWidth}}{'Actors':<{maxMovieActorWidth}}{'Genre':<{maxMovieGenreWidth}}")
         elif type == "TV Show":
-            results.append(f"{'Title':<{maxTVTitleWidth}}{'Directors ':<{maxTVDirectorWidth}}{'Actors':<{maxTVActorWidth}}{'Genre':<{maxTVGenreWidth}}")
-
+            results.append(
+                f"{'Title':<{maxTVTitleWidth}}{'Directors ':<{maxTVDirectorWidth}}{'Actors':<{maxTVActorWidth}}{'Genre':<{maxTVGenreWidth}}")
         for show in self.__shows.values():
             if show.getType() == type:
                 match = True
@@ -344,14 +338,15 @@ class Recommender:
             author: Name of author
             publisher: Name of publisher
 
-            :returns:
-                list of search results or "No Results"
+        :returns:
+            list of search results or "No Results"
         """
         title = title.strip()
         author = author.strip()
         publisher = publisher.strip()
         if title == "" and author == "" and publisher == "":
-            tkinter.messagebox.showerror(title="Error", message="You must enter information for at least one category first.")
+            tkinter.messagebox.showerror(title="Error",
+                                         message="You must enter information for at least one category first.")
             return "No Results"
         results = []
         maxTitleWidth = max(len(book.getTitle()) for book in self.__books.values())
@@ -375,17 +370,17 @@ class Recommender:
 
     def getRecommendations(self, type, title):
         """
-        Gathers recommendations based on the type and title of 
+        Gathers recommendations based on the type and title of
         book, tv show, or movie
-        
-        Takes in the type of media the user wants to use whether it be a 
-        "Movie", "Book", or "Tv Show" and then the user inputs the title of that 
+
+        Takes in the type of media the user wants to use whether it be a
+        "Movie", "Book", or "Tv Show" and then the user inputs the title of that
         media type. It then searches for associated pieces of media based on the input
-    
+
         :parameter:
             type: show, book, or movie
             title: title of media
-            
+
         :return:
             Information about the recommended media thats associated
             with the information the user inputted
@@ -398,7 +393,7 @@ class Recommender:
                 if show.getTitle() == title:
                     show_id = show.getID()
                     break
-            if show_id == None:
+            if show_id is None or title == "":
                 tkinter.messagebox.showerror(title="Error", message="There are no recommendations for this title")
                 return "No Results"
             recommendations = []
@@ -428,7 +423,7 @@ class Recommender:
                 if book.getTitle() == title:
                     book_id = book.getID()
                     break
-            if book_id == None:
+            if book_id is None or title == "":
                 tkinter.messagebox.showerror(title="Error", message="There are no recommendations for this title")
                 return "No Results"
             recommendations = []
