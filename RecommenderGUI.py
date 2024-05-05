@@ -85,9 +85,9 @@ class RecommenderGUI:
         self.__searchBookResults.pack(expand=1, fill=tkinter.X)
 
         self.__loadShowsButton = tkinter.Button(self.__main_window, text="Load Shows", command=self.loadShows)
-        self.__loadShowsButton.pack(side=tkinter.LEFT, padx=100)
+        self.__loadShowsButton.pack(expand=1, side=tkinter.LEFT)
         self.__loadBooksButton = tkinter.Button(self.__main_window, text="Load Books", command=self.loadBooks)
-        self.__loadBooksButton.pack(side=tkinter.LEFT, padx=100)
+        self.__loadBooksButton.pack(expand=1, side=tkinter.LEFT)
 
     def loadShows(self):
         self.__movieText.configure(state=tkinter.NORMAL)
