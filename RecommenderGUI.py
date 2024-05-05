@@ -4,6 +4,8 @@
 from Recommender import Recommender
 import tkinter
 from tkinter import ttk
+import tkinter.messagebox
+
 
 class RecommenderGUI:
     def __init__(self):
@@ -88,6 +90,8 @@ class RecommenderGUI:
         self.__loadShowsButton.pack(expand=1, side=tkinter.LEFT)
         self.__loadBooksButton = tkinter.Button(self.__main_window, text="Load Books", command=self.loadBooks)
         self.__loadBooksButton.pack(expand=1, side=tkinter.LEFT)
+        self.__creditButton = tkinter.Button(self.__main_window, text="Information", command=self.creditInfoBox)
+        self.__creditButton.pack(expand=1, side=tkinter.LEFT)
 
     def loadShows(self):
         self.__movieText.configure(state=tkinter.NORMAL)
@@ -187,7 +191,8 @@ class RecommenderGUI:
                 self.__searchBookResults.insert(tkinter.END, f"{result}\n")
         self.__searchBookResults.configure(state=tkinter.DISABLED)
 
-
+    def creditInfoBox(self):
+        tkinter.messagebox.showinfo(title="Information", message="Programmers: Ryan DeSantis, Jarrett Aaronson, Aidan Rudd\n Completetion Date: 5/5/2024")
 def main():
     app = RecommenderGUI()
     tkinter.mainloop()
