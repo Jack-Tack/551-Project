@@ -1,3 +1,16 @@
+# Authors: Ryan DeSantis, Aidan Rudd, Jarrett Aaronson
+# Date: 5/3/24
+# Description: GUI for the Media For You system
+from Recommender import Recommender
+import tkinter
+from tkinter import ttk
+import matplotlib.pyplot as plt
+import numpy as np
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+
+
+
+class RecommenderGUI:
     def __init__(self):
         """
         constructor function sets up gui and calls all functions for user processes
@@ -303,3 +316,9 @@
         """
         tkinter.messagebox.showinfo(title="Information",
                                     message="Programmers: Ryan DeSantis, Jarrett Aaronson, Aidan Rudd\n Completetion Date: 5/5/2024")
+
+def main():
+    app = RecommenderGUI()
+    tkinter.mainloop()
+
+main()
