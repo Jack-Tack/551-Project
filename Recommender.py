@@ -140,7 +140,7 @@ class Recommender:
                     actors[actor] = actors.get(actor, 0) + 1
             genres[show.getGenre()] = genres.get(show.getGenre(), 0) + 1
         for show in self.__shows.values():
-            if show.getType() != "Movie":
+            if show.getType() == "TV Show":
                 amount += 1
         for rating, count in ratings_count.items():
             percent = count / amount
