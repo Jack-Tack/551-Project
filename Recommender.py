@@ -219,6 +219,10 @@ class Recommender:
             tkinter.messagebox.showerror(title="Error", message="You must enter information for at least one category first.")
             return "No Results"
         results = []
+        maxTitleWidth = max(len(book.getTitle()) for book in self.__books.values())
+        maxAuthorWidth = max(len(book.getAuthors()) for book in self.__books.values())
+        maxPublisherWidth = max(len(book.getPub()) for book in self.__books.values())
+        results.append(f"{'Title':<{maxTitleWidth}}{'Authors':<{maxAuthorWidth}}{'Publishers':<{maxPublisherWidth}}")
         for book in self.__books.values():
             match = True
             if title and title not in book.getTitle():
@@ -228,7 +232,8 @@ class Recommender:
             if publisher and publisher not in book.getPub():
                 match = False
             if match:
-                results.append(f"Title: {book.getTitle()}, Author: {book.getAuthors()}, Publisher: {book.getPub()}")
+                book_details = f"{book.getTitle():<{maxTitleWidth}}{book.getAuthors():<{maxAuthorWidth}}{book.getPub():<{maxPublisherWidth}}"
+                results.append(book_details)
         if len(results) == 0:
             return "No Results"
         return results
