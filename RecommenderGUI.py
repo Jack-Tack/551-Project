@@ -1,11 +1,3 @@
-# Authors: Ryan DeSantis, Aidan Rudd, Jarrett Aaronson
-# Date: 5/3/24
-# Description: GUI for the Media For You system
-from Recommender import Recommender
-import tkinter
-from tkinter import ttk
-
-class RecommenderGUI:
     def __init__(self):
         """
         constructor function sets up gui and calls all functions for user processes
@@ -24,12 +16,14 @@ class RecommenderGUI:
         self.__searchMovieShow = ttk.Frame(self.__nb)
         self.__searchBook = ttk.Frame(self.__nb)
         self.__recommendations = ttk.Frame(self.__nb)
+        self.__charts = ttk.Frame(self.__nb)
         self.__nb.add(self.__movieTab, text="Movies")
         self.__nb.add(self.__showsTab, text="TV Shows")
         self.__nb.add(self.__booksTab, text="Books")
         self.__nb.add(self.__searchMovieShow, text="Search Movies/TV")
         self.__nb.add(self.__searchBook, text="Search Books")
         self.__nb.add(self.__recommendations, text="Recommendations")
+        self.__nb.add(self.__charts, text="Charts")
         # set up movie shows and book tabs widgets
         self.__movieText = tkinter.Text(self.__movieTab, wrap=tkinter.WORD, state=tkinter.DISABLED)
         self.__movieStats = tkinter.Text(self.__movieTab, wrap=tkinter.WORD, state=tkinter.DISABLED)
@@ -49,7 +43,7 @@ class RecommenderGUI:
         self.__actorEntry = tkinter.Entry(self.__searchMovieShow, width=30)
         self.__genreLabel = tkinter.Label(self.__searchMovieShow, text="Genre:")
         self.__genreEntry = tkinter.Entry(self.__searchMovieShow, width=30)
-        self.__searchButton = tkinter.Button(self.__searchMovieShow, text="Search", command=self.searchShows)
+        self.__searchButton = tkinter.Button(self.__searchMovieShow, text="search", command=self.searchShows)
         self.__searchMovieShowResults = tkinter.Text(self.__searchMovieShow, wrap=tkinter.WORD, state=tkinter.DISABLED)
         # set up book search widgets
         self.__titleLabelBook = tkinter.Label(self.__searchBook, text="Title:")
@@ -58,7 +52,7 @@ class RecommenderGUI:
         self.__authorEntry = tkinter.Entry(self.__searchBook, width=30)
         self.__publisherLabel = tkinter.Label(self.__searchBook, text="Publisher:")
         self.__publisherEntry = tkinter.Entry(self.__searchBook, width=30)
-        self.__searchBookButton = tkinter.Button(self.__searchBook, text="Search", command=self.searchBooks)
+        self.__searchBookButton = tkinter.Button(self.__searchBook, text="search", command=self.searchBooks)
         self.__searchBookResults = tkinter.Text(self.__searchBook, wrap=tkinter.WORD, state=tkinter.DISABLED)
         # set up recommender widgets
         self.__recommenderSearchTypeLabel = tkinter.Label(self.__recommendations, text="Type")
@@ -66,16 +60,18 @@ class RecommenderGUI:
         self.__searchRecommendationsComboBox = ttk.Combobox(self.__recommendations, values=self.__recommendOptions)
         self.__recommendTitleLabel = tkinter.Label(self.__recommendations, text="Title:")
         self.__recommendTitleEntry = tkinter.Entry(self.__recommendations, width=30)
-        self.__recommendationsButton = tkinter.Button(self.__recommendations, text="Get Recommendations",
-                                                      command=self.getRecommendations)
+        self.__recommendationsButton = tkinter.Button(self.__recommendations, text="Get Recommendations", command=self.getRecommendations)
         self.__recommendationsResults = tkinter.Text(self.__recommendations, wrap=tkinter.WORD, state=tkinter.DISABLED)
         # pack widgets
         self.__movieText.pack(expand=1, fill=tkinter.BOTH)
         self.__movieStats.pack(expand=1, fill=tkinter.BOTH)
+
         self.__showsText.pack(expand=1, fill=tkinter.BOTH)
         self.__showsStats.pack(expand=1, fill=tkinter.BOTH)
+
         self.__booksText.pack(expand=1, fill=tkinter.BOTH)
         self.__booksStats.pack(expand=1, fill=tkinter.BOTH)
+
         self.__searchTypeLabel.pack(expand=1)
         self.__searchMovieShowComboBox.pack(expand=1)
         self.__titleLabel.pack(expand=1)
@@ -88,6 +84,7 @@ class RecommenderGUI:
         self.__genreEntry.pack(expand=1)
         self.__searchButton.pack(expand=1)
         self.__searchMovieShowResults.pack(expand=1, fill=tkinter.X)
+
         self.__titleLabelBook.pack(expand=1)
         self.__titleEntryBook.pack(expand=1)
         self.__authorLabel.pack(expand=1)
@@ -96,6 +93,7 @@ class RecommenderGUI:
         self.__publisherEntry.pack(expand=1)
         self.__searchBookButton.pack(expand=1)
         self.__searchBookResults.pack(expand=1, fill=tkinter.X)
+
         self.__recommenderSearchTypeLabel.pack(expand=1)
         self.__searchRecommendationsComboBox.pack(expand=1)
         self.__recommendTitleLabel.pack(expand=1)
@@ -107,11 +105,12 @@ class RecommenderGUI:
         self.__loadShowsButton.pack(expand=1, side=tkinter.LEFT)
         self.__loadBooksButton = tkinter.Button(self.__main_window, text="Load Books", command=self.loadBooks)
         self.__loadBooksButton.pack(expand=1, side=tkinter.LEFT)
-        self.__loadRecommendationsButton = tkinter.Button(self.__main_window, text="Load Recommendations",
-                                                          command=self.loadAssociations)
+        self.__loadRecommendationsButton = tkinter.Button(self.__main_window, text="Load Recommendations", command=self.loadAssociations)
         self.__loadRecommendationsButton.pack(expand=1, side=tkinter.LEFT)
+
         self.__creditButton = tkinter.Button(self.__main_window, text="Information", command=self.creditInfoBox)
         self.__creditButton.pack(expand=1, side=tkinter.LEFT)
+
         self.__deleteButton = tkinter.Button(self.__main_window, text="Quit", command=self.__main_window.destroy)
         self.__deleteButton.pack(expand=1, side=tkinter.LEFT)
 
@@ -130,6 +129,10 @@ class RecommenderGUI:
         self.__showsText.delete("1.0", tkinter.END)
         self.__showsStats.delete("1.0", tkinter.END)
         self.__recommender.loadShows()
+        showPercentages = []
+        moviePercentages = []
+        labels = []
+        labels2 = []
         # get lists of shows and movies
         showsList = self.__recommender.getTVList()
         movieList = self.__recommender.getMovieList()
@@ -139,7 +142,9 @@ class RecommenderGUI:
         ratingCount, avgDuration, maxActor, freqGenre = self.__recommender.getTVStats()
         self.__showsStats.insert(tkinter.END, "Ratings:\n")
         for rating, percentage in ratingCount.items():
-            self.__showsStats.insert(tkinter.END, f"{rating}: {percentage * 100:.2f}%\n")
+            self.__showsStats.insert(tkinter.END, f"{rating}: {percentage*100:.2f}%\n")
+            labels.append(rating)
+            showPercentages.append(percentage*100)
         self.__showsStats.insert(tkinter.END, "\n")
         self.__showsStats.insert(tkinter.END, "Average Number of Seasons: " + str(avgDuration) + " seasons" + "\n")
         self.__showsStats.insert(tkinter.END, "\n")
@@ -152,7 +157,10 @@ class RecommenderGUI:
         ratingCount, avgDuration, maxDirector, maxActor, freqGenre = self.__recommender.getMovieStats()
         self.__movieStats.insert(tkinter.END, "Ratings:\n")
         for rating, percentage in ratingCount.items():
-            self.__movieStats.insert(tkinter.END, f"{rating}: {percentage * 100:.2f}%\n")
+            self.__movieStats.insert(tkinter.END, f"{rating}: {percentage*100:.2f}%\n")
+            labels2.append(rating)
+            moviePercentages.append(percentage*100)
+
         self.__movieStats.insert(tkinter.END, "\n")
         self.__movieStats.insert(tkinter.END, "Average Movie Duration: " + str(avgDuration) + " minutes" + "\n")
         self.__movieStats.insert(tkinter.END, "\n")
@@ -167,10 +175,27 @@ class RecommenderGUI:
         self.__showsText.configure(state=tkinter.DISABLED)
         self.__showsStats.configure(state=tkinter.DISABLED)
 
+        colors = ['gold', 'yellowgreen', 'lightcoral', 'lightskyblue', 'salmon', 'steelblue', 'olive', 'orange', 'violet', 'deeppink']
+        fig, axs = plt.subplots(1, 2, figsize=(10, 5))
+
+        axs[0].pie(showPercentages, labels=labels, colors=colors)
+        axs[0].axis("equal")
+        axs[0].set_title("TV Show Ratings")
+        axs[1].pie(moviePercentages, labels=labels2, colors=colors)
+        axs[1].axis("equal")
+        axs[1].set_title("Movie Ratings")
+        canvas = FigureCanvasTkAgg(fig, master=self.__charts)
+        canvas.draw()
+        canvas.get_tk_widget().pack(fill="both", expand=True)
+
+
+
+
     def loadBooks(self):
         """
         load books from input file using recommender.loadBooks()
         :return: fills in book information
+
         """
         # enable text edits and delete previous text
         self.__booksText.configure(state=tkinter.NORMAL)
@@ -191,6 +216,7 @@ class RecommenderGUI:
         # disable text edits
         self.__booksText.configure(state=tkinter.DISABLED)
         self.__booksStats.configure(state=tkinter.DISABLED)
+
 
     def searchShows(self):
         """
@@ -245,6 +271,7 @@ class RecommenderGUI:
     def loadAssociations(self):
         """
         load associations file
+
         """
         self.__recommender.loadAssociations()
 
@@ -272,12 +299,7 @@ class RecommenderGUI:
     def creditInfoBox(self):
         """
         pops up credit info for program
+
         """
         tkinter.messagebox.showinfo(title="Information",
                                     message="Programmers: Ryan DeSantis, Jarrett Aaronson, Aidan Rudd\n Completetion Date: 5/5/2024")
-
-def main():
-    app = RecommenderGUI()
-    tkinter.mainloop()
-
-main()
