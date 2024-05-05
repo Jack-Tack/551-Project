@@ -111,6 +111,9 @@ class RecommenderGUI:
         self.__creditButton = tkinter.Button(self.__main_window, text="Information", command=self.creditInfoBox)
         self.__creditButton.pack(expand=1, side=tkinter.LEFT)
 
+        self.__deleteButton = tkinter.Button(self.__main_window, text="Quit", command=self.__main_window.destroy)
+        self.__deleteButton.pack(expand=1, side=tkinter.LEFT)
+
     def loadShows(self):
         self.__movieText.configure(state=tkinter.NORMAL)
         self.__movieStats.configure(state=tkinter.NORMAL)
@@ -221,10 +224,10 @@ class RecommenderGUI:
         self.__recommendationsResults.delete('1.0', tkinter.END)
         if recommendations:
             for recommendation in recommendations:
-                self.__recommendationsResults.insert(tkinter.END, f"{recommendation}\n")
+                self.__recommendationsResults.insert(tkinter.END, f"{recommendation}")
         else:
             self.__recommendationsResults.insert(tkinter.END, "No recommendations found.\n")
-            self.__recommendationsResults.configure(state=tkinter.DISABLED)
+        self.__recommendationsResults.configure(state=tkinter.DISABLED)
 
     def creditInfoBox(self):
         tkinter.messagebox.showinfo(title="Information",
