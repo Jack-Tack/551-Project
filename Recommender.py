@@ -97,6 +97,7 @@ class Recommender:
         actors = {}
         genres = {}
         amount = 0
+        total = 0
         for show in [show for show in self.__shows.values() if show.getType() == "Movie"]:
             showRate = show.getShowRate() if show.getShowRate() else "None"
             ratings_count[showRate] = ratings_count.get(show.getShowRate(), 0) + 1
@@ -113,7 +114,11 @@ class Recommender:
                 amount += 1
         for rating, count in ratings_count.items():
             percent = count / amount
+            total += round(percent, 2)
             ratings_count[rating] = round(percent, 2)
+        if "None" in ratings_count:
+            fix_offset = 1 - total
+            ratings_count["None"] += fix_offset
         avg_duration = round(total_duration / amount, 2)
         max_director = sorted(directors.items(), reverse=True, key=lambda x: x[1])[0][0]
         max_actor = sorted(actors.items(), reverse=True, key=lambda x: x[1])[0][0]

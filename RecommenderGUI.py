@@ -62,8 +62,8 @@ class RecommenderGUI:
         self.__searchRecommendationsComboBox = ttk.Combobox(self.__recommendations, values=self.__recommendOptions)
         self.__recommendTitleLabel = tkinter.Label(self.__recommendations, text="Title:")
         self.__recommendTitleEntry = tkinter.Entry(self.__recommendations, width=30)
-        self.__recommendationsButton = tkinter.Button(self.__recommendations, text="Get Recommendations", command=self.getRecommendations)
-        self.__recommendationsResults = tkinter.Text(self.__recommendations, wrap=tkinter.WORD, state=tkinter.DISABLED)
+        #self.__recommendationsButton = tkinter.Button(self.__recommendations, text="Get Recommendations", command=self.getRecommendations)
+        #self.__recommendationsResults = tkinter.Text(self.__recommendations, wrap=tkinter.WORD, state=tkinter.DISABLED)
 
         self.__movieText.pack(expand=1, fill=tkinter.BOTH)
         self.__movieStats.pack(expand=1, fill=tkinter.BOTH)
@@ -100,8 +100,8 @@ class RecommenderGUI:
         self.__searchRecommendationsComboBox.pack(expand=1)
         self.__recommendTitleLabel.pack(expand=1)
         self.__recommendTitleEntry.pack(expand=1)
-        self.__recommendationsButton.pack(expand=1)
-        self.__recommendationsResults.pack(expand=1, fill=tkinter.X)
+        #self.__recommendationsButton.pack(expand=1)
+        #self.__recommendationsResults.pack(expand=1, fill=tkinter.X)
 
         self.__loadShowsButton = tkinter.Button(self.__main_window, text="Load Shows", command=self.loadShows)
         self.__loadShowsButton.pack(expand=1, side=tkinter.LEFT)
@@ -128,7 +128,7 @@ class RecommenderGUI:
         ratingCount, avgDuration, maxActor, freqGenre = self.__recommender.getTVStats()
         self.__showsStats.insert(tkinter.END, "Ratings:\n")
         for rating, percentage in ratingCount.items():
-            self.__showsStats.insert(tkinter.END, f"{rating}: {percentage*100}%\n")
+            self.__showsStats.insert(tkinter.END, f"{rating}: {percentage*100:.2f}%\n")
         self.__showsStats.insert(tkinter.END, "\n")
         self.__showsStats.insert(tkinter.END, "Average Number of Seasons: " + str(avgDuration) + " seasons" + "\n")
         self.__showsStats.insert(tkinter.END, "\n")
@@ -140,7 +140,7 @@ class RecommenderGUI:
         ratingCount, avgDuration, maxDirector, maxActor, freqGenre = self.__recommender.getMovieStats()
         self.__movieStats.insert(tkinter.END, "Ratings:\n")
         for rating, percentage in ratingCount.items():
-            self.__movieStats.insert(tkinter.END, f"{rating}: {percentage*100}%\n")
+            self.__movieStats.insert(tkinter.END, f"{rating}: {percentage*100:.2f}%\n")
         self.__movieStats.insert(tkinter.END, "\n")
         self.__movieStats.insert(tkinter.END, "Average Movie Duration: " + str(avgDuration) + " minutes" + "\n")
         self.__movieStats.insert(tkinter.END, "\n")
@@ -208,19 +208,7 @@ class RecommenderGUI:
                 self.__searchBookResults.insert(tkinter.END, f"{result}\n")
         self.__searchBookResults.configure(state=tkinter.DISABLED)
 
-        def getRecommendations(self):
-            self.__recommendationsResults.configure(state=tkinter.NORMAL)
-            type = self.__searchRecommendationsComboBox.get()
-            title = self.__recommendTitleEntry.get()
-            recommendations = self.__recommender.getRecommendations(type, title)
 
-            self.__recommendationsResults.delete('1.0', tkinter.END)
-            if recommendations:
-                for recommendation in recommendations:
-                    self.__recommendationsResults.insert(tkinter.END, f"{recommendation}\n")
-            else:
-                self.__recommendationsResults.insert(tkinter.END, "No recommendations found.\n")
-                self.__recommendationsResults.configure(state=tkinter.DISABLED)
 
     def creditInfoBox(self):
         tkinter.messagebox.showinfo(title="Information", message="Programmers: Ryan DeSantis, Jarrett Aaronson, Aidan Rudd\n Completetion Date: 5/5/2024")
