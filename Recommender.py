@@ -246,12 +246,13 @@ class Recommender:
     def getRecommendations(self, type, title):
         type = type.strip()
         title = title.strip()
-        if type == "movie" or type == "tv show":
+        if type == "Movie" or type == "TV Show":
             show_id = None
             for show_id, show in self.__shows.items():
                 if show.getTitle() == title:
+                    show_id = show.getID()
                     break
-            else:
+            if show_id == None:
                 tkinter.messagebox.showerror(title="Error", message="There are no recommendations for this title")
                 return "No Results"
             recommendations = []
@@ -259,26 +260,29 @@ class Recommender:
                 for assoc_id, num_assoc in self.__associations[show_id].items():
                     if assoc_id in self.__books:
                         book = self.__books[assoc_id]
-                        recommendations.append(f"Book Title: {book.getTitle()}")
-                        recommendations.append(f"Authors: {book.getAuthors()}")
-                        recommendations.append(f"Rating: {book.getRating()}")
-                        recommendations.append(f"ISBN: {book.getISBN()}")
-                        recommendations.append(f"ISBN13: {book.getISBN13()}")
-                        recommendations.append(f"Language: {book.getLang()}")
-                        recommendations.append(f"Number of Pages: {book.getNumPage()}")
-                        recommendations.append(f"Number of Ratings: {book.getNumRate()}")
-                        recommendations.append(f"Date of Publication: {book.getPubDate()}")
-                        recommendations.append(f"Publisher: {book.getPub()}")
+                        recommendations.append(f"Book Title: {book.getTitle()}\n")
+                        recommendations.append(f"Authors: {book.getAuthors()}\n")
+                        recommendations.append(f"Rating: {book.getRating()}\n")
+                        recommendations.append(f"ISBN: {book.getISBN()}\n")
+                        recommendations.append(f"ISBN13: {book.getISBN13()}\n")
+                        recommendations.append(f"Language: {book.getLang()}\n")
+                        recommendations.append(f"Number of Pages: {book.getNumPage()}\n")
+                        recommendations.append(f"Number of Ratings: {book.getNumRate()}\n")
+                        recommendations.append(f"Date of Publication: {book.getPubDate()}\n")
+                        recommendations.append(f"Publisher: {book.getPub()}\n")
+                        recommendations.append("************************************")
+                        recommendations.append("\n")
             if not recommendations:
                 return "No Results"
             else:
                 return "\n".join(recommendations)
-        elif type == "book":
+        elif type == "Book":
             book_id = None
             for book_id, book in self.__books.items():
                 if book.getTitle() == title:
+                    book_id = book.getID()
                     break
-            else:
+            if book_id == None:
                 tkinter.messagebox.showerror(title="Error", message="There are no recommendations for this title")
                 return "No Results"
             recommendations = []
