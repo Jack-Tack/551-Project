@@ -120,7 +120,6 @@ class Recommender:
         freq_genre = sorted(genres.items(), reverse=True, key=lambda x: x[1])[0][0]
         return ratings_count, avg_duration, max_director, max_actor, freq_genre
 
-
     def getTVStats(self):
         ratings_count = {}
         total_seasons = 0
@@ -177,21 +176,36 @@ class Recommender:
             return "No Results"
 
         results = []
+        maxMovieTitleWidth = max(len(show.getTitle()) for show in self.__shows.values() if show.getType() == "Movie")
+        maxMovieDirectorWidth = max(len(show.getDirectors()) for show in self.__shows.values() if show.getType() == "Movie")
+        maxMovieActorWidth = max(len(show.getActors()) for show in self.__shows.values() if show.getType() == "Movie")
+        maxMovieGenreWidth = max(len(show.getGenre()) for show in self.__shows.values() if show.getType() == "Movie")
+        maxTVTitleWidth = max(len(show.getTitle()) for show in self.__shows.values() if show.getType() == "TV Show")
+        maxTVDirectorWidth = len("Directors ")
+        maxTVActorWidth = max(len(show.getActors()) for show in self.__shows.values() if show.getType() == "TV Show")
+        maxTVGenreWidth = max(len(show.getGenre()) for show in self.__shows.values() if show.getType() == "TV Show")
+        if type == "Movie":
+            results.append(f"{'Title':<{maxMovieTitleWidth}}{'Directors':<{maxMovieDirectorWidth}}{'Actors':<{maxMovieActorWidth}}{'Genre':<{maxMovieGenreWidth}}")
+        elif type == "TV Show":
+            results.append(f"{'Title':<{maxTVTitleWidth}}{'Directors ':<{maxTVDirectorWidth}}{'Actors':<{maxTVActorWidth}}{'Genre':<{maxTVGenreWidth}}")
 
         for show in self.__shows.values():
             if show.getType() == type:
                 match = True
-                if title and title != show.getTitle():
+                if title and title not in show.getTitle():
                     match = False
-                if director and title != show.getDirectors():
+                if director and director not in show.getDirectors():
                     match = False
-                if actor and title != show.getActors():
+                if actor and actor not in show.getActors():
                     match = False
-                if genre and title != show.getGenre():
+                if genre and genre not in show.getGenre():
                     match = False
 
                 if match:
-                    show_details = f"Title: {show.getTitle()}, Directors: {show.getDirectors()}, Actors: {show.getActors()}, Genre: {show.getGenre()}"
+                    if type == "Movie":
+                        show_details = f"{show.getTitle():<{maxMovieTitleWidth}}{show.getDirectors():<{maxMovieDirectorWidth}}{show.getActors():<{maxMovieActorWidth}}{show.getGenre():<{maxMovieGenreWidth}}"
+                    elif type == "TV Show":
+                        show_details = f"{show.getTitle():<{maxTVTitleWidth}}{show.getDirectors():<{maxTVDirectorWidth}}{show.getActors():<{maxTVActorWidth}}{show.getGenre():<{maxTVGenreWidth}}"
                     results.append(show_details)
         if len(results) == 0:
             return "No Results"
@@ -207,11 +221,11 @@ class Recommender:
         results = []
         for book in self.__books.values():
             match = True
-            if title and title != book.getTitle():
+            if title and title not in book.getTitle():
                 match = False
-            if author and author != book.getAuthors():
+            if author and author not in book.getAuthors():
                 match = False
-            if publisher and publisher != book.getPub():
+            if publisher and publisher not in book.getPub():
                 match = False
             if match:
                 results.append(f"Title: {book.getTitle()}, Author: {book.getAuthors()}, Publisher: {book.getPub()}")
