@@ -154,8 +154,8 @@ class Recommender:
         return avg_count, max_author, max_publisher
 
     def searchTVMovies(self, type, title, director, actor, genre):
-        type = type.strip().lower()
-        if type != "movie" and type != "tv show":
+        type = type.strip()
+        if type != "Movie" and type != "TV Show":
             tkinter.messagebox.showerror(title="Error", message="You must select Movie or TV Show from Type first.")
             return "No Results"
         title = title.strip()
@@ -165,18 +165,26 @@ class Recommender:
         if title == "" and director == "" and actor == "" and genre == "":
             tkinter.messagebox.showerror(title="Error", message="You must enter information for at least one category first.")
             return "No Results"
+
         results = []
+
         for show in self.__shows.values():
-            if show.type.lower() == type:
-                if title and title not in show.title.lower():
-                    continue
-                if director and director not in show.directors.lower():
-                    continue
-                if actor and actor not in show.actors.lower():
-                    continue
-                if genre and genre not in show.genre.lower():
-                    continue
-                results.append(show)
+            if show.getType() == type:
+                match = True
+                if title and title != show.getTitle():
+                    match = False
+                if director and title != show.getDirectors():
+                    match = False
+                if actor and title != show.getActors():
+                    match = False
+                if genre and title != show.getGenre():
+                    match = False
+
+                if match:
+                    show_details = f"Title: {show.getTitle()}, Directors: {show.getDirectors()}, Actors: {show.getActors()}, Genre: {show.getGenre()}"
+                    results.append(show_details)
+        if len(results) == 0:
+            return "No Results"
         return results
 
     def searchBooks(self, title, author, publisher):
@@ -188,13 +196,17 @@ class Recommender:
             return "No Results"
         results = []
         for book in self.__books.values():
-            if title and title not in book.title.lower():
-                continue
-            if author and author not in book.author.lower():
-                continue
-            if publisher and publisher not in book.pub.lower():
-                continue
-            results.append(book)
+            match = True
+            if title and title != book.getTitle():
+                match = False
+            if author and author != book.getAuthors():
+                match = False
+            if publisher and publisher != book.getPub():
+                match = False
+            if match:
+                results.append(f"Title: {book.getTitle()}, Author: {book.getAuthors()}, Publisher: {book.getPub()}")
+        if len(results) == 0:
+            return "No Results"
         return results
 
     def getRecommendations(self, type, title):
