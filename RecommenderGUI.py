@@ -94,6 +94,13 @@ class RecommenderGUI:
         self.__searchBookButton.pack(expand=1)
         self.__searchBookResults.pack(expand=1, fill=tkinter.X)
 
+        self.__recommenderSearchTypeLabel.pack(expand=1)
+        self.__searchRecommendationsComboBox.pack(expand=1)
+        self.__recommendTitleLabel.pack(expand=1)
+        self.__recommendTitleEntry.pack(expand=1)
+        self.__recommendationsButton.pack(expand=1)
+        self.__recommendationsResults.pack(expand=1, fill=tkinter.X)
+
         self.__loadShowsButton = tkinter.Button(self.__main_window, text="Load Shows", command=self.loadShows)
         self.__loadShowsButton.pack(expand=1, side=tkinter.LEFT)
         self.__loadBooksButton = tkinter.Button(self.__main_window, text="Load Books", command=self.loadBooks)
