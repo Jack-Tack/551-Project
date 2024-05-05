@@ -98,7 +98,8 @@ class Recommender:
         genres = {}
         amount = 0
         for show in [show for show in self.__shows.values() if show.getType() == "Movie"]:
-            ratings_count[show.getShowRate()] = ratings_count.get(show.getShowRate(), 0) + 1
+            showRate = show.getShowRate() if show.getShowRate() else "None"
+            ratings_count[showRate] = ratings_count.get(show.getShowRate(), 0) + 1
             total_duration += int(show.getDuration().strip().replace("min", ""))
             for director in show.getDirectors().split("\\"):
                 if director.strip():
@@ -127,7 +128,8 @@ class Recommender:
         genres = {}
         amount = 0
         for show in [show for show in self.__shows.values() if show.getType() == "TV Show"]:
-            ratings_count[show.getShowRate()] = ratings_count.get(show.getShowRate(), 0) + 1
+            showRate = show.getShowRate() if show.getShowRate() else "None"
+            ratings_count[showRate] = ratings_count.get(show.getShowRate(), 0) + 1
             total_seasons += int(show.getDuration().strip().replace('Season', '').replace('s', ''))
             for actor in show.getActors().split("\\"):
                 if actor.strip():
