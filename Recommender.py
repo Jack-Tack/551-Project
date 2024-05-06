@@ -223,7 +223,7 @@ class Recommender:
             ratings_count[showRate] = ratings_count.get(show.getShowRate(), 0) + 1
             total_seasons += int(show.getDuration().strip().replace('Season', '').replace('s', ''))
             for actor in show.getActors().split("\\"):
-                if actor.strip():
+                if actor.split():
                     actors[actor] = actors.get(actor, 0) + 1
             genres[show.getGenre()] = genres.get(show.getGenre(), 0) + 1
         for show in self.__shows.values():
@@ -259,7 +259,7 @@ class Recommender:
             for publisher in book.getPub().split("\\"):
                 if publisher.strip():
                     publishers[publisher] = publishers.get(publisher, 0) + 1
-        avg_count = round(page_count / len(self.__books), 2)
+        avg_count = round(page_count / (len(self.__books) - 1), 2)
         max_author = sorted(authors.items(), reverse=True, key=lambda x: x[1])[0][0]
         max_publisher = sorted(publishers.items(), reverse=True, key=lambda x: x[1])[0][0]
         return avg_count, max_author, max_publisher
